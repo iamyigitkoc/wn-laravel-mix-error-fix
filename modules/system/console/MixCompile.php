@@ -151,6 +151,8 @@ class MixCompile extends Command
         $this->createWebpackConfig($mixJsPath);
         $command = $this->createCommand($mixJsPath);
 
+		
+	
         $process = new Process(
             $command,
             $this->getPackagePath($mixJsPath),
@@ -158,6 +160,7 @@ class MixCompile extends Command
             null,
             null
         );
+		
 
         try {
             $process->setTty(true);
@@ -188,12 +191,12 @@ class MixCompile extends Command
         array_unshift(
             $command,
 			"npx",
-			"mix",
+			"webpack",
 			"build",
             //$basePath . '/node_modules/webpack/bin/webpack.js',
-            //'--progress',
-			'--mix-config=' . $this->getWebpackJsPath($mixJsPath) //config -> mix-config
-            //'--config=' . $this->getWebpackJsPath($mixJsPath)
+            '--progress',
+			//$this->getWebpackJsPath($mixJsPath) //config -> mix-config
+            '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
         return $command;
     }
@@ -205,13 +208,13 @@ class MixCompile extends Command
     {
         $basePath = base_path();
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
-
+		//Added slash escpaces for fixture. This caused removal of slashes in paths and directories
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, '', $mixJsPath, plugins_path(), base_path()],
+            [addslashes($basePath), '', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path())],
             $fixture
         );
-
+	
         File::put($this->getWebpackJsPath($mixJsPath), $config);
     }
 

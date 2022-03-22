@@ -72,11 +72,7 @@ class MixWatch extends MixCompile
         $command = parent::createCommand($mixJsPath);
 
         // @TODO: Detect Homestead running on Windows to switch to watch-poll-options instead, see https://laravel-mix.com/docs/6.0/cli#polling
-        //$command[] = '--watch';
-		$mixCommandIndex = array_search('build', $command);
-		if($mixCommandIndex > -1){
-			$command[$mixCommandIndex] = 'watch';
-		}
+        $command[] = '--watch';
 
         return $command;
     }
@@ -88,10 +84,10 @@ class MixWatch extends MixCompile
     {
         $basePath = base_path();
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
-
+		//Added slash escpaces for fixture. This caused removal of slashes in paths and directories
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path())],
             $fixture
         );
 
