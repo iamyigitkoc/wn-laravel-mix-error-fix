@@ -43,7 +43,8 @@ class MixWatch extends MixCompile
         $package = $packages[$name];
 
         $relativeMixJsPath = $package['mix'];
-        if (!$this->canCompilePackage($relativeMixJsPath)) {
+		//Base_path fix added
+        if (!$this->canCompilePackage(base_path($relativeMixJsPath))) {
             $this->error(
                 sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $packagePath)
             );
@@ -72,6 +73,7 @@ class MixWatch extends MixCompile
 
         // @TODO: Detect Homestead running on Windows to switch to watch-poll-options instead, see https://laravel-mix.com/docs/6.0/cli#polling
         $command[] = '--watch';
+
 
         return $command;
     }
