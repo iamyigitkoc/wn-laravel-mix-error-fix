@@ -183,11 +183,17 @@ class MixCompile extends Command
     {
         $basePath = base_path();
         $command = $this->argument('webpackArgs') ?? [];
+		//TODO: Mix process error
+		//Rather than trying to execute webpack, try to run mix with npx since npx is already available via PATH variable
         array_unshift(
             $command,
-            $basePath . '/node_modules/webpack/bin/webpack.js',
-            '--progress',
-            '--config=' . $this->getWebpackJsPath($mixJsPath)
+			"npx",
+			"mix",
+			"build",
+            //$basePath . '/node_modules/webpack/bin/webpack.js',
+            //'--progress',
+			'--mix-config=' . $this->getWebpackJsPath($mixJsPath) //config -> mix-config
+            //'--config=' . $this->getWebpackJsPath($mixJsPath)
         );
         return $command;
     }

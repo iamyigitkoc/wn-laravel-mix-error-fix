@@ -72,8 +72,11 @@ class MixWatch extends MixCompile
         $command = parent::createCommand($mixJsPath);
 
         // @TODO: Detect Homestead running on Windows to switch to watch-poll-options instead, see https://laravel-mix.com/docs/6.0/cli#polling
-        $command[] = '--watch';
-
+        //$command[] = '--watch';
+		$mixCommandIndex = array_search('build', $command);
+		if($mixCommandIndex > -1){
+			$command[$mixCommandIndex] = 'watch';
+		}
 
         return $command;
     }
